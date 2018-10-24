@@ -32,6 +32,7 @@ ttk.Label(mainframe, text="meters").grid(column=3, row=2, sticky=W)
 for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
 
 feet_entry.focus()
+
 root.bind('<Return>', calculate)
 
 root.mainloop()
