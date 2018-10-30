@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from node import Node
+import json_parser 
 
 class Visualizer(object):
 	def __init__(self, title='QEP Visualizer'):
