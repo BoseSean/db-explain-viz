@@ -1,43 +1,42 @@
+from constants import Fields as F
+from constants import NaN
 
+def get(dic, key):
+    # Get value from a dic, if key not exists, set as NaN
+    if key not in dic:
+        dic[key] = NaN
+    return dic[key]
 
-
-def get(dic, key, default = None):
-
-def process_plan(plan):
-    calculatePlannerEstimate(plan)
-    calculateActuals(plan)
+def process_plan(plan, explain):
+    calculatePlannerEstimate(plan, explain)
+    calculateActuals(plan, explain)
     return plan
 
-def calculatePlannerEstimate(node):
-    node[PLANNER_ESTIMATE_FACTOR] = node.get(ACTUAL_ROWS) / node.get(PLAN_ROWS)
-    node[PLANNER_ESIMATE_DIRECTION] = EstimateDirection.under
+def calculatePlannerEstimate(node, explain):
+    node[F.PLANNER_ESTIMATE_FACTOR] = get(node, F.ACTUAL_ROWS) / get(node, F.PLAN_ROWS)
+    # node[F.PLANNER_ESIMATE_DIRECTION] = EstimateDirection.under
 
-    if node[PLANNER_ESTIMATE_FACTOR] < 1:
-        node[PLANNER_ESIMATE_DIRECTION] = EstimateDirection.over
-        node[PLANNER_ESTIMATE_FACTOR] = node.get(PLAN_ROWS) / node.get(ACTUAL_ROWS)
+    if get(node, F.PLANNER_ESTIMATE_FACTOR) < 1:
+        # node[PLANNER_ESIMATE_DIRECTION] = EstimateDirection.over
+        node[F.PLANNER_ESTIMATE_FACTOR] = get(node, F.PLAN_ROWS) / get(node, F.ACTUAL_ROWS)
 
-def calculateActuals(node):
-        node[ACTUAL_DURATION] = node.get(ACTUAL_TOTAL_TIME)
-        node[ACTUAL_COST] = node.get(TOTAL_COST)
+def calculateActuals(node, explain):
+        node[F.ACTUAL_DURATION] = get(node, F.ACTUAL_TOTAL_TIME)
+        node[F.ACTUAL_COST] = get(node, F.TOTAL_COST)
 
-        console.log (node)
-        _.each(node.Plans, subPlan => {
-           console.log('processing chldren', subPlan)
-           # since CTE scan duration is already included in its subnodes, it should be be
-           # subtracted from the duration of this node
-            if (subPlan[NODE_TYPE] !== CTE_SCAN) {
-               node[ACTUAL_DURATION] = node[ACTUAL_DURATION] - subPlan[ACTUAL_TOTAL_TIME]
-               node[ACTUAL_COST] = node[ACTUAL_COST] - subPlan[TOTAL_COST]
-            }
-        })
+        print(node)
+        for subplan in node[F.Plans]:
+            if get(subplan, F.NODE_TYPE) !== F.CTE_SCAN:
+               node[F.ACTUAL_DURATION] = get(node, F.ACTUAL_DURATION) - get(subplan, F.ACTUAL_TOTAL_TIME)
+               node[F.ACTUAL_COST] = get(node, F.ACTUAL_COST) - get(subplan, F.TOTAL_COST)
+            
 
-        if (node[ACTUAL_COST] < 0) {
-            node[ACTUAL_COST] = 0
-        }
+        if get(node, F.ACTUAL_COST < 0:
+            node[F.ACTUAL_COST] = 0
 
-        # since time is reported for an invidual loop, actual duration must be adjusted by number of loops
-        node[ACTUAL_DURATION] = node[ACTUAL_DURATION] * node[ACTUAL_LOOPS]
+        node[F.ACTUAL_DURATION] = get(node, F.ACTUAL_DURATION) * get(node, F.ACTUAL_LOOPS)
+        explain[F.TOTAL_COST] += get(node, F.ACTUAL_COST)
+
 
 if __name_- == '__main__':
     pass
-    print("123")
