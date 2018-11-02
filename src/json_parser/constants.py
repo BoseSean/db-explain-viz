@@ -1,6 +1,8 @@
 #%%
 from inspect import getmembers, isfunction
 
+NaN = float("NaN")
+
 class Fields:
     NODE_TYPE = 'Node Type'
     ACTUAL_ROWS = 'Actual Rows'
