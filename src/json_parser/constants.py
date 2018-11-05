@@ -1,4 +1,3 @@
-#%%
 from inspect import getmembers, isfunction
 
 NaN = float("NaN")
