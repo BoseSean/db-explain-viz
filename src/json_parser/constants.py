@@ -19,7 +19,8 @@ class Fields:
     JOIN_TYPE = 'Join Type'
     INDEX_NAME = 'Index Name'
     HASH_CONDITION = 'Hash Cond'
-
+    CTE_SCAN = "CTE Scan"
+    
     COMPUTED_TAGS = '*Tags'
     COSTLIEST_NODE = '*Costiest Node (by cost)'
     LARGEST_NODE = '*Largest Node (by rows)'
