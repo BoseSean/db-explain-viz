@@ -1,12 +1,14 @@
+#%%
 from constants import Fields as F
 from constants import NaN
 
 def get(dic, key):
     # Get value from a dic, if key not exists, set as NaN
-    if key == F.PLANS:
-        return []
     if key not in dic:
-        dic[key] = NaN
+        if key == F.PLANS:
+            dic[key] = []
+        else:
+            dic[key] = NaN
     return dic[key]
 
 def process_plan(explain_list):
@@ -14,15 +16,16 @@ def process_plan(explain_list):
         e[F.MAXIMUM_COSTS] = 0
         e[F.MAXIMUM_ROWS] = 0
         e[F.MAXIMUM_DURATION] = 0
+        e[F.TOTAL_COST] = 0
         process(e["Plan"], e)
 
-
 def process(plan, explain):
+    print(plan[F.NODE_TYPE])
     calculatePlannerEstimate(plan, explain)
     calculateActuals(plan, explain)
     calculateMaximums(plan, explain)
 
-    for i in get(node, F.Plans):
+    for i in get(plan, F.PLANS):
         process(i, explain)
     return plan
 
@@ -38,8 +41,7 @@ def calculateActuals(node, explain):
         node[F.ACTUAL_DURATION] = get(node, F.ACTUAL_TOTAL_TIME)
         node[F.ACTUAL_COST] = get(node, F.TOTAL_COST)
 
-        print(node)
-        for subplan in get(node, F.Plans):
+        for subplan in get(node, F.PLANS):
             if get(subplan, F.NODE_TYPE) != F.CTE_SCAN:
                node[F.ACTUAL_DURATION] = get(node, F.ACTUAL_DURATION) - get(subplan, F.ACTUAL_TOTAL_TIME)
                node[F.ACTUAL_COST] = get(node, F.ACTUAL_COST) - get(subplan, F.TOTAL_COST)
@@ -49,6 +51,7 @@ def calculateActuals(node, explain):
             node[F.ACTUAL_COST] = 0
 
         node[F.ACTUAL_DURATION] = get(node, F.ACTUAL_DURATION) * get(node, F.ACTUAL_LOOPS)
+        ####**
         explain[F.TOTAL_COST] += get(node, F.ACTUAL_COST)
 
 def calculateMaximums(node, explain):
@@ -61,5 +64,9 @@ def calculateMaximums(node, explain):
     if explain[F.MAXIMUM_DURATION] < get(node, F.ACTUAL_DURATION):
         explain[F.MAXIMUM_DURATION] = get(node, F.ACTUAL_DURATION)
 
-if __name_- == '__main__':
-    pass
+if __name__=="__main__":
+    import json
+    qep = json.load(open("simple_sample.json","r"))
+    process_plan(qep)
+    with open('out.json', 'w') as outfile:
+        json.dump(qep, outfile)
