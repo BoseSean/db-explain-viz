@@ -38,15 +38,16 @@ class Visualizer(object):
 
 	def configure_qep_view(self, plan):
 		self.qep_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.query_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.qep_view.grid(column=1, row=1, sticky=(N, W, E, S))
-		self.query_view.grid(column=1, row=2, sticky=(N, W, E, S))
+		self.qep_view.grid(column=1, row=2, sticky=(N, W, E, S))
 
 		self.qep_text = Text(self.qep_view, height = 20, width = 70)
 		self.qep_text.insert(END, json.dumps(plan, indent=1))
 		self.qep_text.grid(column = 1, row = 1, sticky=(N, W, E, S))
 
 	def configure_query_view(self, query):
+		self.query_view = ttk.Frame(self.root, padding="3 3 12 12")
+		self.query_view.grid(column=1, row=1, sticky=(N, W, E, S))
+
 		self.query_text = CustomText(self.query_view, height = 20, width = 70)
 		self.query_text.insert(END, query)
 		self.query_text.tag_configure("highlight", background="yellow")
@@ -107,8 +108,9 @@ class Visualizer(object):
 		print(tag)
 		self.tree.tag_configure(tag, background='yellow')
 		self.detail(node)
-		highlight_vals = correspond(node)
 
+		self.query_text.clear_highlight()
+		highlight_vals = correspond(node)
 		print('highlight', highlight_vals)
 		if highlight_vals:
 			for val in highlight_vals:

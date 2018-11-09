@@ -35,8 +35,10 @@ class CustomText(Text):
             if index == "": break
             if count.get() == 0: break # degenerate pattern which matches zero-length strings
             self.mark_set("matchStart", index)
+            print('test', "%s+%sc" % (index, count.get()))
             self.mark_set("matchEnd", "%s+%sc" % (index, count.get()))
             self.tag_add(tag, "matchStart", "matchEnd")
 
     def clear_highlight(self):
-        
+        for tag in self.tag_names():
+            self.tag_remove(tag, 1.0, END)
