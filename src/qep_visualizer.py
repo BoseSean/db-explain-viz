@@ -7,59 +7,14 @@ import uuid
 from CustomText import CustomText
 class Visualizer(object):
 	def __init__(self, query=None, plan=None, title='QEP Visualizer'):
+
 		self.root = Tk()
 		self.root.title(title)
 		self.root.columnconfigure(0, weight=1)
 		self.root.rowconfigure(0, weight=1)
 
-		self.qep_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.query_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.qep_view.grid(column=1, row=1, sticky=(N, W, E, S))
-		self.query_view.grid(column=1, row=2, sticky=(N, W, E, S))
+		self.configure_layout(query, plan)
 
-		self.qep_text = Text(self.qep_view, height = 20, width = 70)
-		# self.qep_text.insert(END, "Input your QEP here\n")
-		self.qep_text.insert(END, json.dumps(plan, indent=1))
-		self.qep_text.grid(column = 1, row = 1, sticky=(N, W, E, S))
-
-		# self.query_text = Text(self.query_view, height = 20, width = 70)
-		# # self.query_text.insert(END, "Input your query here\n")
-		# self.query_text.insert(END, query)
-		# self.query_text.grid(column=1, row=1, sticky=(S, W, E, N))
-
-
-		self.query_text = CustomText(self.query_view, height = 20, width = 70)
-		self.query_text.insert(END, query)
-		self.query_text.tag_configure("highlight", background="yellow")
-		self.query_text.highlight_pattern("SELECT", "highlight")
-		self.query_text.grid(column = 1, row = 1, sticky=(S, W, E, N))
-
-
-		self.explain_button = Button(self.root, text="Explain", width = 10, height = 5)
-		self.explain_button.grid(column=1, row=3, sticky = (W, E))
-
-
-		self.master_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.master_view.grid(column=2, row=1, sticky=(N, W, E, S))
-
-		self.detail_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.detail_view.grid(column=3, row=1, sticky=(N, W, E, S), rowspan=3)
-		ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
-		ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
-
-		self.summary_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.summary_view.grid(column=2, row=2)
-		self.show_summary_view(plan[0])
-	
-		self.tree = ttk.Treeview(self.master_view, columns=('exe_time', 'percentage'))
-		self.tree.column('exe_time', width=100, anchor='center')
-		self.tree.heading('exe_time', text='exe_time / ms')
-
-		self.tree.column('percentage', width=100, anchor='center')
-		self.tree.heading('percentage', text='percentage')
-		self.tree.grid()
-
-		self.tree.bind("<Double 1>", self.itemClicked)
 		self.hm = {}
 
 		root = json_to_tree(plan)
@@ -68,8 +23,63 @@ class Visualizer(object):
 		self.mycolor = '#40E0D0' #(64, 204, 208)
 
 		self.style = ttk.Style()
-		self.style.configure("highlight.TLabel", foreground="red", background="white")
-		self.style.configure("BW.TLabel", foreground="black", background="white")
+		# self.style.configure("highlight.TLabel", foreground="red", background="white")
+		# self.style.configure("BW.TLabel", foreground="black", background="white")
+
+	def configure_layout(self, query, plan):
+		self.configure_qep_view(plan)
+		self.configure_query_view(query)
+		self.configure_master_view()
+		self.configure_detail_view()
+		self.configure_summary_view(plan)
+		self.configure_button()
+
+	def configure_qep_view(self, plan):
+		self.qep_view = ttk.Frame(self.root, padding="3 3 12 12")
+		self.query_view = ttk.Frame(self.root, padding="3 3 12 12")
+		self.qep_view.grid(column=1, row=1, sticky=(N, W, E, S))
+		self.query_view.grid(column=1, row=2, sticky=(N, W, E, S))
+
+		self.qep_text = Text(self.qep_view, height = 20, width = 70)
+		self.qep_text.insert(END, json.dumps(plan, indent=1))
+		self.qep_text.grid(column = 1, row = 1, sticky=(N, W, E, S))
+
+	def configure_query_view(self, query):
+		self.query_text = CustomText(self.query_view, height = 20, width = 70)
+		self.query_text.insert(END, query)
+		self.query_text.tag_configure("highlight", background="yellow")
+		self.query_text.grid(column = 1, row = 1, sticky=(S, W, E, N))
+
+
+	def configure_master_view(self):
+		self.master_view = ttk.Frame(self.root, padding="3 3 12 12")
+		self.master_view.grid(column=2, row=1, sticky=(N, W, E, S), rowspan=2)
+
+		self.tree = ttk.Treeview(self.master_view, columns=('exe_time', 'percentage'))
+		self.tree.column('exe_time', width=100, anchor='center')
+		self.tree.heading('exe_time', text='exe_time / ms')
+
+		self.tree.column('percentage', width=100, anchor='center')
+		self.tree.heading('percentage', text='percentage')
+		self.tree.pack(expand=True, fill='y')
+
+		self.tree.bind("<Double 1>", self.itemClicked)
+
+	def configure_detail_view(self):
+		self.detail_view = ttk.Frame(self.root, padding="3 3 12 12")
+		self.detail_view.grid(column=3, row=1, sticky=(N, W, E, S), rowspan=3)
+		ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
+		ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
+
+	def configure_summary_view(self, plan):
+		self.summary_view = ttk.Frame(self.root, padding="3 3 12 12")
+		self.summary_view.grid(column=2, row=3)
+		self.show_summary_view(plan[0])
+
+	def configure_button(self):
+		self.explain_button = Button(self.root, text="Explain", width = 10, height = 5)
+		self.explain_button.grid(column=1, row=3, sticky = (W, E))
+
 
 	def show_summary_view(self, plan):
 		r = 1
@@ -95,6 +105,8 @@ class Visualizer(object):
 		print(tag)
 		self.tree.tag_configure(tag, background='yellow')
 		self.detail(node)
+		# self.query_text.highlight_pattern("c", "highlight")
+
 
 	def itemHover(self, event, obj):
 		# node = self.hm[self.tree.selection()[0]]
@@ -127,6 +139,8 @@ class Visualizer(object):
 		ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
 		r = 2
 		for k,v in node.attributes.items():
+			if k == 'Filter':
+				print(v)
 			ttk.Label(self.detail_view, text=k).grid(column=1, row=r, sticky=(W, S))
 			ttk.Label(self.detail_view, text=v, style='highlight.TLabel').grid(column=2, row=r, sticky=(W, S))
 			r += 1
