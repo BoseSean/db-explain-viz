@@ -25,8 +25,8 @@ class Visualizer(object):
 		self.mycolor = '#40E0D0' #(64, 204, 208)
 
 		self.style = ttk.Style()
-		# self.style.configure("highlight.TLabel", foreground="red", background="white")
-		# self.style.configure("BW.TLabel", foreground="black", background="white")
+		self.style.configure("highlight.TLabel", foreground="red", background="white")
+		self.style.configure("BW.TLabel", foreground="black", background="white")
 
 	def configure_layout(self, query, plan):
 		self.configure_qep_view(plan)
@@ -75,8 +75,9 @@ class Visualizer(object):
 		ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
 
 	def configure_summary_view(self, plan):
-		self.summary_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.summary_view.grid(column=2, row=9, rowspan=3)
+		self.summary_view = ttk.Frame(self.root)
+		self.summary_view.grid(column=2, row=8, rowspan=3)
+		# self.summary_view.pack(expand=True, fill='y')
 		self.show_summary_view(plan[0])
 
 	def configure_button(self):
@@ -85,12 +86,12 @@ class Visualizer(object):
 
 
 	def show_summary_view(self, plan):
-		r = 1
+		r = 0
 		for k,v in plan.items():
 			if k == 'Plan':
 				continue
-			ttk.Label(self.summary_view, text=k,  style='BW.TLabel').grid(column=1, row=r, sticky=(W, S))
-			ttk.Label(self.summary_view, text=v,  style='BW.TLabel').grid(column=2, row=r, sticky=(W, S))
+			ttk.Label(self.summary_view, text=k).grid(column=1, row=r, sticky=(W, S))
+			ttk.Label(self.summary_view, text=v, style='highlight.TLabel').grid(column=2, row=r, sticky=(W, S))
 			print(k, v)
 			r += 1
 			
@@ -151,7 +152,7 @@ class Visualizer(object):
 			if k == 'Filter':
 				print(v)
 			ttk.Label(self.detail_view, text=k).grid(column=1, row=r, sticky=(W, S))
-			ttk.Label(self.detail_view, text=v, style='highlight.TLabel').grid(column=2, row=r, sticky=(W, S))
+			ttk.Label(self.detail_view, text=v, style='BW.TLabel').grid(column=2, row=r, sticky=(W, S))
 			r += 1
 
 
