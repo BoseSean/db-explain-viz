@@ -20,7 +20,7 @@ def process_plan(explain_list):
         process(e["Plan"], e)
 
 def process(plan, explain):
-    print(plan[F.NODE_TYPE])
+    # print(plan[F.NODE_TYPE])
     calculatePlannerEstimate(plan, explain)
     calculateActuals(plan, explain)
     calculateMaximums(plan, explain)
@@ -66,7 +66,7 @@ def calculateMaximums(node, explain):
 
 if __name__=="__main__":
     import json
-    qep = json.load(open("simple_sample.json","r"))
+    qep = json.load(open("sample.json","r"))
     process_plan(qep)
     with open('out.json', 'w') as outfile:
-        json.dump(qep, outfile)
+        json.dump(qep, outfile, indent=4)
