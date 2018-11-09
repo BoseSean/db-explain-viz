@@ -25,7 +25,6 @@ class CustomText(Text):
 
         start = self.index(start)
         end = self.index(end)
-        print('text', self.get(start))
         self.mark_set("matchStart", start)
         self.mark_set("matchEnd", start)
         self.mark_set("searchLimit", end)
@@ -38,3 +37,6 @@ class CustomText(Text):
             self.mark_set("matchStart", index)
             self.mark_set("matchEnd", "%s+%sc" % (index, count.get()))
             self.tag_add(tag, "matchStart", "matchEnd")
+
+    def clear_highlight(self):
+        

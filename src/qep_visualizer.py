@@ -5,6 +5,8 @@ from tkinter import ttk
 from json_parser import *
 import uuid
 from CustomText import CustomText
+from highlighter import * 
+
 class Visualizer(object):
 	def __init__(self, query=None, plan=None, title='QEP Visualizer'):
 
@@ -105,7 +107,12 @@ class Visualizer(object):
 		print(tag)
 		self.tree.tag_configure(tag, background='yellow')
 		self.detail(node)
-		# self.query_text.highlight_pattern("c", "highlight")
+		highlight_vals = correspond(node)
+
+		print('highlight', highlight_vals)
+		if highlight_vals:
+			for val in highlight_vals:
+				self.query_text.highlight_pattern(val, "highlight")
 
 
 	def itemHover(self, event, obj):
