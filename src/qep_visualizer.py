@@ -38,7 +38,7 @@ class Visualizer(object):
 
 	def configure_qep_view(self, plan):
 		self.qep_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.qep_view.grid(column=1, row=2, sticky=(N, W, E, S))
+		self.qep_view.grid(column=1, row=6, sticky=(N, W, E, S), rowspan=5)
 
 		self.qep_text = Text(self.qep_view, height = 20, width = 70)
 		self.qep_text.insert(END, json.dumps(plan, indent=1))
@@ -46,7 +46,7 @@ class Visualizer(object):
 
 	def configure_query_view(self, query):
 		self.query_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.query_view.grid(column=1, row=1, sticky=(N, W, E, S))
+		self.query_view.grid(column=1, row=1, sticky=(N, W, E, S), rowspan=5)
 
 		self.query_text = CustomText(self.query_view, height = 20, width = 70)
 		self.query_text.insert(END, query)
@@ -56,7 +56,7 @@ class Visualizer(object):
 
 	def configure_master_view(self):
 		self.master_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.master_view.grid(column=2, row=1, sticky=(N, W, E, S), rowspan=2)
+		self.master_view.grid(column=2, row=1, sticky=(N, W, E, S), rowspan=7)
 
 		self.tree = ttk.Treeview(self.master_view, columns=('exe_time', 'percentage'))
 		self.tree.column('exe_time', width=100, anchor='center')
@@ -70,18 +70,18 @@ class Visualizer(object):
 
 	def configure_detail_view(self):
 		self.detail_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.detail_view.grid(column=3, row=1, sticky=(N, W, E, S), rowspan=3)
+		self.detail_view.grid(column=3, row=1, sticky=(N, W, E, S), rowspan=11)
 		ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
 		ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
 
 	def configure_summary_view(self, plan):
 		self.summary_view = ttk.Frame(self.root, padding="3 3 12 12")
-		self.summary_view.grid(column=2, row=3)
+		self.summary_view.grid(column=2, row=9, rowspan=3)
 		self.show_summary_view(plan[0])
 
 	def configure_button(self):
 		self.explain_button = Button(self.root, text="Explain", width = 10, height = 5)
-		self.explain_button.grid(column=1, row=3, sticky = (W, E))
+		self.explain_button.grid(column=1, row=11, sticky = (W, E))
 
 
 	def show_summary_view(self, plan):
