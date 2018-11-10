@@ -1,6 +1,6 @@
 from tkinter import ttk
 from tkinter import *
-from CustomText import CustomText
+from custom_text import CustomText
 from highlighter import *
 from json_parser import *
 
@@ -17,11 +17,7 @@ class Visualizer(object):
         self.root.rowconfigure(0, weight=1)
         self.configure_layout(query, plan)
         self.configure_style()
-
-        self.hm = {}
-        root = json_to_tree(plan)
-        self.dfs(root)
-        print(self.hm)
+        self.process(plan)
 
     def configure_style(self):
         self.mycolor = '#40E0D0'  # (64, 204, 208)
@@ -69,17 +65,17 @@ class Visualizer(object):
         self.tree.bind("<Double 1>", self.itemClicked)
 
     def configure_detail_view(self):
-        self.detail_view = ttk.Frame(self.root, padding="3 3 12 12", width=800)
+        self.detail_view = ttk.Frame(self.root, padding="3 3 12 12")
         self.detail_view.grid(column=3, row=1, sticky=(N, W, E, S), rowspan=11)
         ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
         ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
 
     def configure_summary_view(self, plan):
-        self.summary_view = ttk.Frame(self.root)
-        self.summary_view.grid(column=2, row=8, rowspan=3)
+        # self.summary_view = ttk.Frame(self.root)
+        self.summary_view = Frame(self.root, bg='white', padx=3, pady=12)
+        self.summary_view.grid(column=2, row=8, rowspan=2)
         # self.summary_view.pack(expand=True, fill='y')
         self.show_summary_view(plan[0])
-
 
     def buttonClick(self):
         new_plan = json.loads(self.qep_text.get("1.0",END))
@@ -90,7 +86,6 @@ class Visualizer(object):
         self.hm = {}
         root = json_to_tree(new_plan)
         self.dfs(root)
-        # print(self.hm)
 
     def configure_button(self):
         self.explain_button = Button(self.root, text="Explain", width=10, height=5, command=self.buttonClick)
@@ -101,9 +96,8 @@ class Visualizer(object):
         for k, v in plan.items():
             if k == 'Plan':
                 continue
-            ttk.Label(self.summary_view, text=k).grid(column=1, row=r, sticky=(W, S))
-            ttk.Label(self.summary_view, text=v, style='highlight.TLabel').grid(column=2, row=r, sticky=(W, S))
-            print(k, v)
+            Label(self.summary_view, text=k, bg="white").grid(column=1, row=r, sticky=(W, S))
+            Label(self.summary_view, text=v, bg="white").grid(column=2, row=r, sticky=(W, S))
             r += 1
 
     def get_summary(self, plan):
@@ -125,6 +119,12 @@ class Visualizer(object):
         if highlight_vals:
             for val in highlight_vals:
                 self.query_text.highlight_pattern(val, "highlight")
+
+    def process(self, plan):
+        self.hm = {}
+        root = json_to_tree(plan)
+        self.dfs(root)
+        print(self.hm)
 
     def itemHover(self, event, obj):
         # node = self.hm[self.tree.selection()[0]]
