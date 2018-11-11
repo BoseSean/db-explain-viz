@@ -2,10 +2,11 @@ from tkinter import ttk
 from tkinter import *
 from highlighter import *
 from json_parser import *
+from constants import Fields as F
 
 
 class View(object):
-    def __init__(self, event_handler, query=None, plan=None):
+    def __init__(self, event_handler):
         self.handler = event_handler
         self.root = Tk()
         self.root.title('QEP Visualizer')
@@ -19,7 +20,7 @@ class View(object):
         self.configure_style()
 
     def configure_style(self):
-        self.mycolor = '#40E0D0'  # (64, 204, 208)
+        # self.mycolor = '#40E0D0'  # (64, 204, 208)
         self.style = ttk.Style()
         self.style.configure("highlight.TLabel", foreground="red", background="white")
         self.style.configure("BW.TLabel", foreground="black", background="white")
@@ -40,13 +41,11 @@ class View(object):
 
         self.qep_text.grid(column=1, row=1, sticky=(N, W, E, S))
 
-    def configure_query_view(self, query=None):
+    def configure_query_view(self):
         self.query_view = ttk.Frame(self.root, padding="3 3 12 12")
         self.query_view.grid(column=1, row=1, sticky=(N, W, E, S), rowspan=5)
 
         self.query_text = CustomText(self.query_view, height=20, width=70)
-        if query:
-            self.query_text.insert(END, query)
         self.query_text.tag_configure("highlight", background="yellow")
         self.query_text.grid(column=1, row=1, sticky=(S, W, E, N))
 
@@ -71,13 +70,11 @@ class View(object):
         ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
         ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
 
-    def configure_summary_view(self, plan=None):
+    def configure_summary_view(self):
         # self.summary_view = ttk.Frame(self.root)
         self.summary_view = Frame(self.root, bg='white', padx=3, pady=12)
         self.summary_view.grid(column=2, row=8, rowspan=2)
         # self.summary_view.pack(expand=True, fill='y')
-        if plan:
-            self.show_summary_view(plan[0])
 
     def configure_button(self):
         self.explain_button = Button(self.root, text="Explain", width=10, height=5, command=self.handler.on_button_click)
@@ -88,6 +85,8 @@ class View(object):
         for k, v in plan.items():
             if k == 'Plan':
                 continue
+            if k == 'Execution Time':
+                self.execution_time = float(v)
             Label(self.summary_view, text=k, bg="white").grid(column=1, row=r, sticky=(W, S))
             Label(self.summary_view, text=v, bg="white").grid(column=2, row=r, sticky=(W, S))
             r += 1
@@ -98,10 +97,9 @@ class View(object):
         self.tree.insert(parent_id, 0, t, text=node_type, tags=(t))
         self.tree.item(t, open=True)
 
-        total_cost = node.attributes['Actual Total Time']
-        startup_cost = node.attributes['Actual Total Time']
-        self.tree.set(t, 'exe_time', str(total_cost - startup_cost))
-        self.tree.set(t, 'percentage', '')
+        duration = float(node.attributes[F.ACTUAL_DURATION])
+        self.tree.set(t, 'exe_time', "%.2f"%(duration))
+        self.tree.set(t, 'percentage', '%.2f'% (duration/self.execution_time))
         self.handler.tag_node_hm[t] = node
 
         return t
@@ -131,11 +129,14 @@ class View(object):
         return self.qep_text.get("1.0",END)
 
     def set_query_plan_text(self, query_plan):
+        self.show_summary_view(query_plan[0])
         self.qep_text.delete('1.0', END)
         self.qep_text.insert(END, json.dumps(query_plan, indent=1))
 
+
     def get_query_text(self):
         return self.query_text.get('1.0', END)
+
 
     def set_query_text(self, query):
         self.query_text.delete('1.0', END)
