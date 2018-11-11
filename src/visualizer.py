@@ -20,7 +20,9 @@ class Visualizer(EventHandler):
 
 
     def on_new_plan(self, query, plan):
-        self.view.configure_layout(query, plan)
+        self.view.configure_layout()
+        self.view.set_query_plan_text(plan)
+        self.view.set_query_text(query)
         self.tag_node_hm = {}
         process_plan(plan)
         root = json_to_tree(plan)

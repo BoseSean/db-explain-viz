@@ -15,7 +15,7 @@ class View(object):
         self.root.rowconfigure(0, weight=5)
         self.root.rowconfigure(0, weight=5)
         self.root.rowconfigure(0, weight=1)
-        self.configure_layout(query, plan)
+        self.configure_layout()
         self.configure_style()
 
     def configure_style(self):
@@ -24,25 +24,23 @@ class View(object):
         self.style.configure("highlight.TLabel", foreground="red", background="white")
         self.style.configure("BW.TLabel", foreground="black", background="white")
 
-    def configure_layout(self, query=None, plan=None):
-        self.configure_qep_view(json.dumps(plan, indent=1))
-        self.configure_query_view(query)
+    def configure_layout(self):
+        self.configure_qep_view()
+        self.configure_query_view()
         self.configure_master_view()
         self.configure_detail_view()
-        self.configure_summary_view(plan)
+        self.configure_summary_view()
         self.configure_button()
 
-    def configure_qep_view(self, plan):
+    def configure_qep_view(self):
         self.qep_view = ttk.Frame(self.root, padding="3 3 12 12")
         self.qep_view.grid(column=1, row=6, sticky=(N, W, E, S), rowspan=5)
 
         self.qep_text = Text(self.qep_view, height=20, width=70)
-        if plan is not None:
-            print('has plan')
-            self.qep_text.insert(END, plan)
+
         self.qep_text.grid(column=1, row=1, sticky=(N, W, E, S))
 
-    def configure_query_view(self, query):
+    def configure_query_view(self, query=None):
         self.query_view = ttk.Frame(self.root, padding="3 3 12 12")
         self.query_view.grid(column=1, row=1, sticky=(N, W, E, S), rowspan=5)
 
@@ -73,7 +71,7 @@ class View(object):
         ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
         ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
 
-    def configure_summary_view(self, plan):
+    def configure_summary_view(self, plan=None):
         # self.summary_view = ttk.Frame(self.root)
         self.summary_view = Frame(self.root, bg='white', padx=3, pady=12)
         self.summary_view.grid(column=2, row=8, rowspan=2)
@@ -133,12 +131,14 @@ class View(object):
         return self.qep_text.get("1.0",END)
 
     def set_query_plan_text(self, query_plan):
-        self.qep_text.insert(END, query_plan)
+        self.qep_text.delete('1.0', END)
+        self.qep_text.insert(END, json.dumps(query_plan, indent=1))
 
     def get_query_text(self):
         return self.query_text.get('1.0', END)
 
-    def set_query_text(self):
+    def set_query_text(self, query):
+        self.query_text.delete('1.0', END)
         self.query_text.insert(END, query)
 
 
