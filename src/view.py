@@ -18,7 +18,6 @@ class View(object):
         self.root.rowconfigure(0, weight=1)
         self.configure_layout(query, plan)
         self.configure_style()
-        # self.process(plan)
 
     def configure_style(self):
         self.mycolor = '#40E0D0'  # (64, 204, 208)
@@ -95,44 +94,18 @@ class View(object):
             Label(self.summary_view, text=v, bg="white").grid(column=2, row=r, sticky=(W, S))
             r += 1
 
-    def itemClicked(self, event):
-        # node = self.hm[self.tree.selection()[0]]
-        for t in self.hm.keys():
-            self.tree.tag_configure(t, background='white')
-        tag = self.tree.selection()[0]
-        node = self.hm[tag]
-        print(tag)
-        self.tree.tag_configure(tag, background='yellow')
-        self.detail(node)
-
-        self.query_text.clear_highlight()
-        highlight_vals = correspond(node)
-        print('highlight', highlight_vals)
-        if highlight_vals:
-            for val in highlight_vals:
-                self.query_text.highlight_pattern(val, "highlight")
-
-    # def process(self, plan):
-    #     self.hm = {}
-    #     root = json_to_tree(plan)
-    #     self.dfs(root)
-    #     print(self.hm)
-
     def add_node(self, node, parent_id=''):
         node_type = node.attributes['Node Type']
         t = str(id(node_type))
-        # t = node.node_type
         self.tree.insert(parent_id, 0, t, text=node_type, tags=(t))
         self.tree.item(t, open=True)
-        # self.tree.tag_configure(t, foreground='red')
 
         total_cost = node.attributes['Actual Total Time']
         startup_cost = node.attributes['Actual Total Time']
         self.tree.set(t, 'exe_time', str(total_cost - startup_cost))
         self.tree.set(t, 'percentage', '')
-        self.handler.hm[t] = node
+        self.handler.tag_node_hm[t] = node
 
-        # self.tree.tag_bind(t, '<1>', lambda x, obj: self.itemHover)
         return t
 
     def detail(self, node):
@@ -150,15 +123,6 @@ class View(object):
 
     def show(self):
         self.root.mainloop()
-
-    # def dfs(self, node, parent_id=''):
-    #     if not node:
-    #         return
-    #     id = self.add_node(node, parent_id)
-    #     # print(node.attributes['Node Type'])
-    #     if node.children:
-    #         for child in node.children:
-    #             self.dfs(child, id)
 
     def get_query_plan_text(self):
         return self.qep_text.get("1.0",END)
