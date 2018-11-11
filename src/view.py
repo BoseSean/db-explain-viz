@@ -5,10 +5,11 @@ from highlighter import *
 from json_parser import *
 
 
-class Visualizer(object):
-    def __init__(self, query=None, plan=None, title='QEP Visualizer'):
+class View(object):
+    def __init__(self, event_handler, query=None, plan=None):
+        self.handler = event_handler
         self.root = Tk()
-        self.root.title(title)
+        self.root.title('QEP Visualizer')
         self.root.columnconfigure(1, weight=1)
         self.root.columnconfigure(2, weight=1)
         self.root.columnconfigure(3, weight=1)
@@ -17,7 +18,7 @@ class Visualizer(object):
         self.root.rowconfigure(0, weight=1)
         self.configure_layout(query, plan)
         self.configure_style()
-        self.process(plan)
+        # self.process(plan)
 
     def configure_style(self):
         self.mycolor = '#40E0D0'  # (64, 204, 208)
@@ -25,7 +26,7 @@ class Visualizer(object):
         self.style.configure("highlight.TLabel", foreground="red", background="white")
         self.style.configure("BW.TLabel", foreground="black", background="white")
 
-    def configure_layout(self, query, plan):
+    def configure_layout(self, query=None, plan=None):
         self.configure_qep_view(json.dumps(plan, indent=1))
         self.configure_query_view(query)
         self.configure_master_view()
@@ -38,7 +39,9 @@ class Visualizer(object):
         self.qep_view.grid(column=1, row=6, sticky=(N, W, E, S), rowspan=5)
 
         self.qep_text = Text(self.qep_view, height=20, width=70)
-        self.qep_text.insert(END, plan)
+        if plan is not None:
+            print('has plan')
+            self.qep_text.insert(END, plan)
         self.qep_text.grid(column=1, row=1, sticky=(N, W, E, S))
 
     def configure_query_view(self, query):
@@ -46,7 +49,8 @@ class Visualizer(object):
         self.query_view.grid(column=1, row=1, sticky=(N, W, E, S), rowspan=5)
 
         self.query_text = CustomText(self.query_view, height=20, width=70)
-        self.query_text.insert(END, query)
+        if query:
+            self.query_text.insert(END, query)
         self.query_text.tag_configure("highlight", background="yellow")
         self.query_text.grid(column=1, row=1, sticky=(S, W, E, N))
 
@@ -62,7 +66,7 @@ class Visualizer(object):
         self.tree.heading('percentage', text='percentage')
         self.tree.pack(expand=True, fill='y')
 
-        self.tree.bind("<Double 1>", self.itemClicked)
+        self.tree.bind("<Double 1>", self.handler.on_node_click)
 
     def configure_detail_view(self):
         self.detail_view = ttk.Frame(self.root, padding="3 3 12 12")
@@ -75,20 +79,11 @@ class Visualizer(object):
         self.summary_view = Frame(self.root, bg='white', padx=3, pady=12)
         self.summary_view.grid(column=2, row=8, rowspan=2)
         # self.summary_view.pack(expand=True, fill='y')
-        self.show_summary_view(plan[0])
-
-    def buttonClick(self):
-        new_plan = json.loads(self.qep_text.get("1.0",END))
-
-        new_query = self.query_text.get('1.0', END)
-        self.configure_layout(new_query, new_plan)
-
-        self.hm = {}
-        root = json_to_tree(new_plan)
-        self.dfs(root)
+        if plan:
+            self.show_summary_view(plan[0])
 
     def configure_button(self):
-        self.explain_button = Button(self.root, text="Explain", width=10, height=5, command=self.buttonClick)
+        self.explain_button = Button(self.root, text="Explain", width=10, height=5, command=self.handler.on_button_click)
         self.explain_button.grid(column=1, row=11, sticky=(W, E))
 
     def show_summary_view(self, plan):
@@ -99,9 +94,6 @@ class Visualizer(object):
             Label(self.summary_view, text=k, bg="white").grid(column=1, row=r, sticky=(W, S))
             Label(self.summary_view, text=v, bg="white").grid(column=2, row=r, sticky=(W, S))
             r += 1
-
-    def get_summary(self, plan):
-        return 'some text'
 
     def itemClicked(self, event):
         # node = self.hm[self.tree.selection()[0]]
@@ -120,16 +112,11 @@ class Visualizer(object):
             for val in highlight_vals:
                 self.query_text.highlight_pattern(val, "highlight")
 
-    def process(self, plan):
-        self.hm = {}
-        root = json_to_tree(plan)
-        self.dfs(root)
-        print(self.hm)
-
-    def itemHover(self, event, obj):
-        # node = self.hm[self.tree.selection()[0]]
-        node = self.hm[obj]
-        self.detail(node)
+    # def process(self, plan):
+    #     self.hm = {}
+    #     root = json_to_tree(plan)
+    #     self.dfs(root)
+    #     print(self.hm)
 
     def add_node(self, node, parent_id=''):
         node_type = node.attributes['Node Type']
@@ -143,7 +130,7 @@ class Visualizer(object):
         startup_cost = node.attributes['Actual Total Time']
         self.tree.set(t, 'exe_time', str(total_cost - startup_cost))
         self.tree.set(t, 'percentage', '')
-        self.hm[t] = node
+        self.handler.hm[t] = node
 
         # self.tree.tag_bind(t, '<1>', lambda x, obj: self.itemHover)
         return t
@@ -164,19 +151,31 @@ class Visualizer(object):
     def show(self):
         self.root.mainloop()
 
-    def dfs(self, node, parent_id=''):
-        if not node:
-            return
-        id = self.add_node(node, parent_id)
-        # print(node.attributes['Node Type'])
-        if node.children:
-            for child in node.children:
-                self.dfs(child, id)
+    # def dfs(self, node, parent_id=''):
+    #     if not node:
+    #         return
+    #     id = self.add_node(node, parent_id)
+    #     # print(node.attributes['Node Type'])
+    #     if node.children:
+    #         for child in node.children:
+    #             self.dfs(child, id)
+
+    def get_query_plan_text(self):
+        return self.qep_text.get("1.0",END)
+
+    def set_query_plan_text(self, query_plan):
+        self.qep_text.insert(END, query_plan)
+
+    def get_query_text(self):
+        return self.query_text.get('1.0', END)
+
+    def set_query_text(self):
+        self.query_text.insert(END, query)
 
 
 if __name__ == '__main__':
     root = json_to_tree(None)
-    viz = Visualizer()
+    viz = View()
     viz.dfs(root)
     for k, v in viz.hm.items():
         print(k, v.attributes['Node Type'])
