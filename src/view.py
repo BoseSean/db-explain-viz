@@ -1,6 +1,5 @@
 from tkinter import ttk
 from tkinter import *
-from custom_text import CustomText
 from highlighter import *
 from json_parser import *
 
@@ -69,6 +68,7 @@ class View(object):
 
     def configure_detail_view(self):
         self.detail_view = ttk.Frame(self.root, padding="3 3 12 12")
+        # self.detail_view = Frame(self.root, width='200')
         self.detail_view.grid(column=3, row=1, sticky=(N, W, E, S), rowspan=11)
         ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
         ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
@@ -115,11 +115,16 @@ class View(object):
         ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
         r = 2
         for k, v in node.attributes.items():
-            if k == 'Filter':
-                print(v)
+            if type(v) == type(0.0):
+                v = "%.2f" % float(v)
             ttk.Label(self.detail_view, text=k).grid(column=1, row=r, sticky=(W, S))
-            ttk.Label(self.detail_view, text=v, style='BW.TLabel').grid(column=2, row=r, sticky=(W, S))
-            r += 1
+            if type(v) == type([]):
+                for i in range(len(v)):
+                    ttk.Label(self.detail_view, text=v[i], style='BW.TLabel').grid(column=2, row=r, sticky=(W, S))
+                    r+= 1
+            else:
+                ttk.Label(self.detail_view, text=v, style='BW.TLabel').grid(column=2, row=r, sticky=(W, S))
+                r += 1
 
     def show(self):
         self.root.mainloop()
@@ -137,11 +142,46 @@ class View(object):
         self.query_text.insert(END, query)
 
 
-if __name__ == '__main__':
-    root = json_to_tree(None)
-    viz = View()
-    viz.dfs(root)
-    for k, v in viz.hm.items():
-        print(k, v.attributes['Node Type'])
+class CustomText(Text):
+    '''A text widget with a new method, highlight_pattern()
 
-    viz.show()
+    example:
+
+    text = CustomText()
+    text.tag_configure("red", foreground="#ff0000")
+    text.highlight_pattern("this should be red", "red")
+
+    The highlight_pattern method is a simplified python
+    version of the tcl code at http://wiki.tcl.tk/3246
+    '''
+    def __init__(self, *args, **kwargs):
+        Text.__init__(self, *args, **kwargs)
+
+    def highlight_pattern(self, pattern, tag, start="1.0", end="end",
+                          regexp=False):
+        '''Apply the given tag to all text that matches the given pattern
+
+        If 'regexp' is set to True, pattern will be treated as a regular
+        expression according to Tcl's regular expression syntax.
+        '''
+
+        start = self.index(start)
+        end = self.index(end)
+        self.mark_set("matchStart", start)
+        self.mark_set("matchEnd", start)
+        self.mark_set("searchLimit", end)
+        count = IntVar()
+        while True:
+            index = self.search(pattern, "matchEnd","searchLimit",
+                                count=count, regexp=regexp)
+            if index == "": break
+            if count.get() == 0: break # degenerate pattern which matches zero-length strings
+            self.mark_set("matchStart", index)
+            print('test', "%s+%sc" % (index, count.get()))
+            self.mark_set("matchEnd", "%s+%sc" % (index, count.get()))
+            self.tag_add(tag, "matchStart", "matchEnd")
+
+    def clear_highlight(self):
+        for tag in self.tag_names():
+            self.tag_remove(tag, 1.0, END)
+

@@ -25,7 +25,7 @@ class Visualizer(EventHandler):
         process_plan(plan)
         root = json_to_tree(plan)
         self.dfs(root)
-        print(self.tag_node_hm)
+        # print(self.tag_node_hm)
 
     def on_button_click(self):
         new_plan = json.loads(self.view.get_query_plan_text())
