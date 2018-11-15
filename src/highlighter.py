@@ -12,27 +12,27 @@ def correspond(node):
     if node_type in NT.SCAN_TYPES:
         highlight_vals.append(node.attributes[F.RELATION_NAME])
 
-    elif node_type == 'CTE Scan':
+    elif node_type == NT.CTE_SCAN:
         alias = node.attributes[F.CTE_NAME]
         highlight_vals.append('WITH %s'% alias)
 
-    elif node_type == "Hash Join":
+    elif node_type == NT.HASH_JOIN:
         condition = remove_redundant_bracket(node.attributes[F.HASH_CONDITION])
         condition_reverse = reverse_condition(condition)
         highlight_vals.extend([condition, condition_reverse])
 
-    elif node_type == "Merge Join":
+    elif node_type == NT.MERGE_JOIN:
         condition = remove_redundant_bracket(node.attributes[F.MERGE_CONDITION])
         condition_reverse = reverse_condition(condition)
         highlight_vals.extend([condition, condition_reverse])
 
-    elif node_type == "Nested Loop":
+    elif node_type == NT.NESTED_LOOP:
         highlight_vals.append(node.attributes[F.NLJ_CONDITION])
 
-    elif node_type in ["Aggregate", 'Hash Aggregate']:
+    elif node_type in NT.AGGREGATE_TYPES:
         highlight_vals.append("GROUP BY " + ', '.join(node.attributes[F.GROUP_KEY]))
 
-    elif node_type == "Sort":
+    elif node_type == NT.SORT:
         sort_keys = []
         for k in node.attributes[F.SORT_KEY]:
             k = remove_redundant_bracket(k)
@@ -41,7 +41,7 @@ def correspond(node):
         # highlight_vals.extend(node.attributes[F.SORT_KEY])
 
 
-    elif node_type == "Limit":
+    elif node_type == NT.LIMIT:
         highlight_vals.append("LIMIT")
 
     else:

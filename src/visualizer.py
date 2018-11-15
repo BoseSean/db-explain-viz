@@ -39,7 +39,6 @@ class Visualizer(EventHandler):
             self.view.tree.tag_configure(t, background='white')
         tag = self.view.tree.selection()[0]
         node = self.tag_node_hm[tag]
-        print(tag)
         self.view.tree.tag_configure(tag, background='yellow')
         self.view.detail(node)
 
