@@ -3,6 +3,9 @@ from inspect import getmembers, isfunction
 NaN = float("NaN")
 
 class Fields:
+    '''
+    Fields contain all the possible attribute names of a node in QEP tree
+    '''
     NODE_TYPE = 'Node Type'
     ACTUAL_ROWS = 'Actual Rows'
     PLAN_ROWS = 'Plan Rows'
@@ -18,6 +21,7 @@ class Fields:
     SORT_KEY = 'Sort Key'
     JOIN_TYPE = 'Join Type'
     INDEX_NAME = 'Index Name'
+    INDEX_COND = 'Index Cond'
     HASH_CONDITION = 'Hash Cond'
     CTE_SCAN = "CTE Scan"
     CTE_NAME = "CTE Name"
@@ -46,6 +50,9 @@ class Fields:
         )
 
 class NodeTypes:
+    '''
+    All the node types (physical operators) of QEP tree
+    '''
     SEQ_SCAN = 'Seq Scan'
     INDEX_SCAN = 'Index Scan'
     INDEX_ONLY_SCAN = 'Index Only Scan'
@@ -60,9 +67,14 @@ class NodeTypes:
     SORT = 'Sort'
     LIMIT = 'Limit'
 
-    SCAN_TYPES = [SEQ_SCAN, INDEX_SCAN, INDEX_ONLY_SCAN, BITMAP_HEAP_SCAN, BITMAP_INDEX_SCAN]
+    SCAN_NORMAL_TYPES = [SEQ_SCAN, BITMAP_HEAP_SCAN]
+    SCAN_INDEX_TYPES = [INDEX_SCAN, INDEX_ONLY_SCAN, BITMAP_INDEX_SCAN]
+    SCAN_TYPES = SCAN_NORMAL_TYPES + SCAN_INDEX_TYPES
     AGGREGATE_TYPES = [AGGREGATE, HASH_AGGREGATE]
 
+class Strings:
+    TITLE = 'QEP Visualizer'
+    HIGHLIGHT_LABEL = "highlight.TLabel"
 
 
 if __name__=="__main__":

@@ -43,12 +43,12 @@ class Visualizer(EventHandler):
         self.view.detail(node)
 
         self.view.query_text.clear_highlight()
-        highlight_vals = correspond(node)
+        highlight_vals = find_correspond(node)
 
         if highlight_vals:
             for val in highlight_vals:
-                regex = '\s(%s)\s'% (val)
-                self.view.query_text.highlight_pattern(val, "highlight", regexp=False)
+                val = val.replace('(', '\(').replace(')', '\)')
+                self.view.query_text.highlight_pattern(val, "highlight", regexp=True)
 
     def dfs(self, node, parent_id=''):
         if not node:

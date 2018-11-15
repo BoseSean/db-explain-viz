@@ -2,6 +2,9 @@ import json
 from constants import Fields as F
 
 class Node(object):
+    '''
+    A node in QEP tree presents a physical operator
+    '''
     def __init__(self, attributes):
         self.attributes = attributes
         if F.PLANS in attributes:
@@ -20,6 +23,11 @@ class Node(object):
 
 
 def json_to_tree(json_str=None):
+    '''
+    Parse a json string to a tree containing Nodes object
+    :param json_str:
+    :return: the root node of QEP tree
+    '''
     if not json_str:
         sample = open('sample.json').read()
         data = json.loads(sample)

@@ -17,7 +17,7 @@ def process_plan(explain_list):
         e[F.MAXIMUM_ROWS] = 0
         e[F.MAXIMUM_DURATION] = 0
         e[F.TOTAL_COST] = 0
-        process(e["Plan"], e)
+        process(e[F.PLAN], e)
 
 def process(plan, explain):
     # print(plan[F.NODE_TYPE])
@@ -63,10 +63,3 @@ def calculateMaximums(node, explain):
 
     if explain[F.MAXIMUM_DURATION] < get(node, F.ACTUAL_DURATION):
         explain[F.MAXIMUM_DURATION] = get(node, F.ACTUAL_DURATION)
-
-if __name__=="__main__":
-    import json
-    qep = json.load(open("sample.json","r"))
-    process_plan(qep)
-    with open('out.json', 'w') as outfile:
-        json.dump(qep, outfile, indent=4)

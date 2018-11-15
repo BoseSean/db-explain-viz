@@ -3,21 +3,21 @@ from tkinter import *
 from highlighter import *
 from json_parser import *
 from constants import Fields as F
+from constants import Strings as St
 
 
 class View(object):
     def __init__(self, event_handler):
         self.handler = event_handler
         self.root = Tk()
-        self.root.title('QEP Visualizer')
+        self.root.title(St.TITLE)
         self.configure_layout()
         self.configure_style()
 
 
     def configure_style(self):
-        # self.mycolor = '#40E0D0'  # (64, 204, 208)
         self.style = ttk.Style()
-        self.style.configure("highlight.TLabel", foreground="red", background="white")
+        self.style.configure(St.HIGHLIGHT_LABEL, foreground="red", background="white")
         self.style.configure("BW.TLabel", foreground="black", background="white")
 
     def configure_layout(self):

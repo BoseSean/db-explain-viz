@@ -1,16 +1,22 @@
-import json
 from constants import Fields as F
 from constants import NodeTypes as NT
 
-
-
-# Assuming sql contains no more than one LIMIT
-
-def correspond(node):
+def find_correspond(node):
+    '''
+    Find correlated component in SQL query for the given node based on certain attributes of the node.
+    :param node: the node to find correlated components for
+    :return: a list of strings which are the correlated components in SQL query
+    '''
     highlight_vals = []
     node_type = node.attributes[F.NODE_TYPE]
+
     if node_type in NT.SCAN_TYPES:
-        highlight_vals.append(node.attributes[F.RELATION_NAME])
+        if node_type in NT.SCAN_INDEX_TYPES:
+            val = node.attributes[F.INDEX_COND]
+        else:
+            val = node.attributes[F.RELATION_NAME]
+        val = remove_redundant_bracket(val)
+        highlight_vals.append('\s%s\s' % val)
 
     elif node_type == NT.CTE_SCAN:
         alias = node.attributes[F.CTE_NAME]
