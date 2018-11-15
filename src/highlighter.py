@@ -1,5 +1,7 @@
 import json
 from constants import Fields as F
+from constants import NodeTypes as NT
+
 
 
 # Assuming sql contains no more than one LIMIT
@@ -7,11 +9,11 @@ from constants import Fields as F
 def correspond(node):
     highlight_vals = []
     node_type = node.attributes[F.NODE_TYPE]
-    if node_type in ["Seq Scan", "Index Scan", "Index Only Scan"]:
+    if node_type in NT.SCAN_TYPES:
         highlight_vals.append(node.attributes[F.RELATION_NAME])
 
     elif node_type == 'CTE Scan':
-        alias = node.attributes[F.ALIAS]
+        alias = node.attributes[F.CTE_NAME]
         highlight_vals.append('WITH %s'% alias)
 
     elif node_type == "Hash Join":

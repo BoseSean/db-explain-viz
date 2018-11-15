@@ -10,6 +10,7 @@ class Fields:
     ACTUAL_LOOPS = 'Actual Loops'
     TOTAL_COST = 'Total Cost'
     PLANS = 'Plans'
+    PLAN = 'Plan'
     RELATION_NAME = 'Relation Name'
     SCHEMA = 'Schema'
     ALIAS = 'Alias'
@@ -19,6 +20,7 @@ class Fields:
     INDEX_NAME = 'Index Name'
     HASH_CONDITION = 'Hash Cond'
     CTE_SCAN = "CTE Scan"
+    CTE_NAME = "CTE Name"
     
     COMPUTED_TAGS = '*Tags'
     COSTLIEST_NODE = '*Costiest Node (by cost)'
@@ -42,6 +44,25 @@ class Fields:
                 )
             )
         )
+
+class NodeTypes:
+    SEQ_SCAN = 'Seq Scan'
+    INDEX_SCAN = 'Index Scan'
+    INDEX_ONLY_SCAN = 'Index Only Scan'
+    BITMAP_HEAP_SCAN = 'Bitmap Heap Scan'
+    BITMAP_INDEX_SCAN = 'Bitmap Index Scan'
+    CTE_SCAN = 'CTE Scan'
+    HASH_JOIN = 'Hash Join'
+    MERGE_JOIN = 'Merge Join'
+    NESTED_LOOP = 'Nested Loop'
+    AGGREGATE = 'Aggregate'
+    HASH_AGGREGATE = 'Hash Aggregate'
+    SORT = 'Sort'
+    LIMIT = 'Limit'
+
+    SCAN_TYPES = [SEQ_SCAN, INDEX_SCAN, INDEX_ONLY_SCAN, BITMAP_HEAP_SCAN, BITMAP_INDEX_SCAN]
+
+
 
 if __name__=="__main__":
     for o in Fields.as_list():

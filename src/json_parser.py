@@ -1,13 +1,13 @@
 import json
-
+from constants import Fields as F
 
 class Node(object):
     def __init__(self, attributes):
         self.attributes = attributes
-        if 'Plans' in attributes:
+        if F.PLANS in attributes:
             # del self.attributes['Plans']
-            self.children = self.get_children_nodes(attributes['Plans'])
-            del self.attributes['Plans']
+            self.children = self.get_children_nodes(attributes[F.PLANS])
+            del self.attributes[F.PLANS]
         else:
             self.children = None
 
@@ -23,7 +23,7 @@ def json_to_tree(json_str=None):
     if not json_str:
         sample = open('sample.json').read()
         data = json.loads(sample)
-        root = Node(data[0]['Plan'])
+        root = Node(data[0][F.PLAN])
         return root
-    root = Node(json_str[0]['Plan'])
+    root = Node(json_str[0][F.PLAN])
     return root
