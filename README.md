@@ -6,5 +6,5 @@ Requirement:
 2. Tkinter (python buildin GUI package)
 
 How to run:
-1. cd <dir>
+1. cd <dir>/src
 2. python3 main.py
