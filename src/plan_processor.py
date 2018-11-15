@@ -59,7 +59,7 @@ def calculateMaximums(node, explain):
         explain[F.MAXIMUM_ROWS] = get(node, F.ACTUAL_ROWS)
 
     if explain[F.MAXIMUM_COSTS] < get(node, F.ACTUAL_COST):
-        explain[F.MAXIMUM_ROWS] = get(node, F.ACTUAL_COST)
+        explain[F.MAXIMUM_COSTS] = get(node, F.ACTUAL_COST)
 
     if explain[F.MAXIMUM_DURATION] < get(node, F.ACTUAL_DURATION):
         explain[F.MAXIMUM_DURATION] = get(node, F.ACTUAL_DURATION)

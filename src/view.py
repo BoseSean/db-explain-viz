@@ -10,14 +10,9 @@ class View(object):
         self.handler = event_handler
         self.root = Tk()
         self.root.title('QEP Visualizer')
-        self.root.columnconfigure(1, weight=1)
-        self.root.columnconfigure(2, weight=1)
-        self.root.columnconfigure(3, weight=1)
-        self.root.rowconfigure(0, weight=5)
-        self.root.rowconfigure(0, weight=5)
-        self.root.rowconfigure(0, weight=1)
         self.configure_layout()
         self.configure_style()
+
 
     def configure_style(self):
         # self.mycolor = '#40E0D0'  # (64, 204, 208)
@@ -26,12 +21,14 @@ class View(object):
         self.style.configure("BW.TLabel", foreground="black", background="white")
 
     def configure_layout(self):
+
         self.configure_qep_view()
         self.configure_query_view()
         self.configure_master_view()
         self.configure_detail_view()
         self.configure_summary_view()
         self.configure_button()
+
 
     def configure_qep_view(self):
         self.qep_view = ttk.Frame(self.root, padding="3 3 12 12")
@@ -71,16 +68,18 @@ class View(object):
         ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
 
     def configure_summary_view(self):
-        # self.summary_view = ttk.Frame(self.root)
         self.summary_view = Frame(self.root, bg='white', padx=3, pady=12)
+        # self.summary_view = ttk.Frame(self.root)
         self.summary_view.grid(column=2, row=8, rowspan=2)
-        # self.summary_view.pack(expand=True, fill='y')
 
     def configure_button(self):
         self.explain_button = Button(self.root, text="Explain", width=10, height=5, command=self.handler.on_button_click)
         self.explain_button.grid(column=1, row=11, sticky=(W, E))
 
     def show_summary_view(self, plan):
+        for child in self.summary_view.winfo_children():
+            print(child)
+            child.destroy()
         r = 0
         for k, v in plan.items():
             if k == 'Plan':
@@ -89,6 +88,8 @@ class View(object):
                 self.execution_time = float(v)
             Label(self.summary_view, text=k, bg="white").grid(column=1, row=r, sticky=(W, S))
             Label(self.summary_view, text=v, bg="white").grid(column=2, row=r, sticky=(W, S))
+            # ttk.Label(self.summary_view, text=k).grid(column=1, row=r, sticky=(W, S))
+            # ttk.Label(self.summary_view, text=v).grid(column=2, row=r, sticky=(W, S))
             r += 1
 
     def add_node(self, node, parent_id=''):

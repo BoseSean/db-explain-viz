@@ -3,6 +3,7 @@ from plan_processor import process_plan
 import json
 from json_parser import *
 from highlighter import *
+import re
 
 class EventHandler():
     def on_button_click(self):
@@ -21,13 +22,12 @@ class Visualizer(EventHandler):
 
     def on_new_plan(self, query, plan):
         self.view.configure_layout()
+        process_plan(plan)
         self.view.set_query_plan_text(plan)
         self.view.set_query_text(query)
         self.tag_node_hm = {}
-        process_plan(plan)
         root = json_to_tree(plan)
         self.dfs(root)
-        # print(self.tag_node_hm)
 
     def on_button_click(self):
         new_plan = json.loads(self.view.get_query_plan_text())
@@ -45,10 +45,11 @@ class Visualizer(EventHandler):
 
         self.view.query_text.clear_highlight()
         highlight_vals = correspond(node)
-        print('highlight', highlight_vals)
+
         if highlight_vals:
             for val in highlight_vals:
-                self.view.query_text.highlight_pattern(val, "highlight")
+                regex = '\s(%s)\s'% (val)
+                self.view.query_text.highlight_pattern(val, "highlight", regexp=False)
 
     def dfs(self, node, parent_id=''):
         if not node:
