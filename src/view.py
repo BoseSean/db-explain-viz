@@ -7,6 +7,9 @@ from constants import Strings as St
 
 
 class View(object):
+    '''
+    Use Tkinter to build GUI
+    '''
     def __init__(self, event_handler):
         self.handler = event_handler
         self.root = Tk()
@@ -18,7 +21,7 @@ class View(object):
     def configure_style(self):
         self.style = ttk.Style()
         self.style.configure(St.HIGHLIGHT_LABEL, foreground="red", background="white")
-        self.style.configure("BW.TLabel", foreground="black", background="white")
+        self.style.configure(St.BW_LABLE, foreground="black", background="white")
 
     def configure_layout(self):
 
@@ -31,7 +34,7 @@ class View(object):
 
 
     def configure_qep_view(self):
-        self.qep_view = ttk.Frame(self.root, padding="3 3 12 12")
+        self.qep_view = ttk.Frame(self.root, padding=St.PADDING)
         self.qep_view.grid(column=1, row=6, sticky=(N, W, E, S), rowspan=5)
 
         self.qep_text = Text(self.qep_view, height=20, width=70)
@@ -39,7 +42,7 @@ class View(object):
         self.qep_text.grid(column=1, row=1, sticky=(N, W, E, S))
 
     def configure_query_view(self):
-        self.query_view = ttk.Frame(self.root, padding="3 3 12 12")
+        self.query_view = ttk.Frame(self.root, padding=St.PADDING)
         self.query_view.grid(column=1, row=1, sticky=(N, W, E, S), rowspan=5)
 
         self.query_text = CustomText(self.query_view, height=20, width=70)
@@ -47,21 +50,21 @@ class View(object):
         self.query_text.grid(column=1, row=1, sticky=(S, W, E, N))
 
     def configure_master_view(self):
-        self.master_view = ttk.Frame(self.root, padding="3 3 12 12")
+        self.master_view = ttk.Frame(self.root, padding=St.PADDING)
         self.master_view.grid(column=2, row=1, sticky=(N, W, E, S), rowspan=7)
 
-        self.tree = ttk.Treeview(self.master_view, columns=('exe_time', 'percentage'))
-        self.tree.column('exe_time', width=100, anchor='center')
-        self.tree.heading('exe_time', text='exe_time / ms')
+        self.tree = ttk.Treeview(self.master_view, columns=(St.COL_EXE_TIME, St.COL_PERCENTAGE))
+        self.tree.column(St.COL_EXE_TIME, width=100, anchor='center')
+        self.tree.heading(St.COL_EXE_TIME, text=St.EXE_TIME_TEXT)
 
-        self.tree.column('percentage', width=100, anchor='center')
-        self.tree.heading('percentage', text='percentage')
+        self.tree.column(St.COL_PERCENTAGE, width=100, anchor='center')
+        self.tree.heading(St.COL_PERCENTAGE, text=St.PERCENTAGE_TEXT)
         self.tree.pack(expand=True, fill='y')
 
         self.tree.bind("<Double 1>", self.handler.on_node_click)
 
     def configure_detail_view(self):
-        self.detail_view = ttk.Frame(self.root, padding="3 3 12 12")
+        self.detail_view = ttk.Frame(self.root, padding=St.PADDING)
         # self.detail_view = Frame(self.root, width='200')
         self.detail_view.grid(column=3, row=1, sticky=(N, W, E, S), rowspan=11)
         ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
@@ -69,7 +72,6 @@ class View(object):
 
     def configure_summary_view(self):
         self.summary_view = Frame(self.root, bg='white', padx=3, pady=12)
-        # self.summary_view = ttk.Frame(self.root)
         self.summary_view.grid(column=2, row=8, rowspan=2)
 
     def configure_button(self):
@@ -82,25 +84,23 @@ class View(object):
             child.destroy()
         r = 0
         for k, v in plan.items():
-            if k == 'Plan':
+            if k == F.PLAN:
                 continue
-            if k == 'Execution Time':
+            if k == F.EXECUTION_TIME:
                 self.execution_time = float(v)
             Label(self.summary_view, text=k, bg="white").grid(column=1, row=r, sticky=(W, S))
             Label(self.summary_view, text=v, bg="white").grid(column=2, row=r, sticky=(W, S))
-            # ttk.Label(self.summary_view, text=k).grid(column=1, row=r, sticky=(W, S))
-            # ttk.Label(self.summary_view, text=v).grid(column=2, row=r, sticky=(W, S))
             r += 1
 
     def add_node(self, node, parent_id=''):
-        node_type = node.attributes['Node Type']
+        node_type = node.attributes[F.NODE_TYPE]
         t = str(id(node_type))
         self.tree.insert(parent_id, 0, t, text=node_type, tags=(t))
         self.tree.item(t, open=True)
 
         duration = float(node.attributes[F.ACTUAL_DURATION])
-        self.tree.set(t, 'exe_time', "%.2f"%(duration))
-        self.tree.set(t, 'percentage', '%.2f'% (duration/self.execution_time))
+        self.tree.set(t, St.COL_EXE_TIME, "%.2f"%(duration))
+        self.tree.set(t, St.COL_PERCENTAGE, '%.2f'% (duration/self.execution_time))
         self.handler.tag_node_hm[t] = node
 
         return t
@@ -108,8 +108,8 @@ class View(object):
     def detail(self, node):
         for child in self.detail_view.winfo_children():
             child.destroy()
-        ttk.Label(self.detail_view, text='ATTRIBUTE').grid(column=1, row=1, sticky=(W, S))
-        ttk.Label(self.detail_view, text="VALUE").grid(column=2, row=1, sticky=(W, S))
+        ttk.Label(self.detail_view, text=St.ATTRIBUTE_TEXT).grid(column=1, row=1, sticky=(W, S))
+        ttk.Label(self.detail_view, text=St.VALUE_TEXT).grid(column=2, row=1, sticky=(W, S))
         r = 2
         for k, v in node.attributes.items():
             if type(v) == type(0.0):
@@ -117,10 +117,10 @@ class View(object):
             ttk.Label(self.detail_view, text=k).grid(column=1, row=r, sticky=(W, S))
             if type(v) == type([]):
                 for i in range(len(v)):
-                    ttk.Label(self.detail_view, text=v[i], style='BW.TLabel').grid(column=2, row=r, sticky=(W, S))
+                    ttk.Label(self.detail_view, text=v[i], style=St.BW_LABLE).grid(column=2, row=r, sticky=(W, S))
                     r+= 1
             else:
-                ttk.Label(self.detail_view, text=v, style='BW.TLabel').grid(column=2, row=r, sticky=(W, S))
+                ttk.Label(self.detail_view, text=v, style=St.BW_LABLE).grid(column=2, row=r, sticky=(W, S))
                 r += 1
 
     def show(self):
@@ -153,8 +153,6 @@ class CustomText(Text):
     text.tag_configure("red", foreground="#ff0000")
     text.highlight_pattern("this should be red", "red")
 
-    The highlight_pattern method is a simplified python
-    version of the tcl code at http://wiki.tcl.tk/3246
     '''
     def __init__(self, *args, **kwargs):
         Text.__init__(self, *args, **kwargs)

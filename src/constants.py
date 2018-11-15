@@ -25,6 +25,7 @@ class Fields:
     HASH_CONDITION = 'Hash Cond'
     CTE_SCAN = "CTE Scan"
     CTE_NAME = "CTE Name"
+    EXECUTION_TIME = 'Execution Time'
     
     COMPUTED_TAGS = '*Tags'
     COSTLIEST_NODE = '*Costiest Node (by cost)'
@@ -67,16 +68,19 @@ class NodeTypes:
     SORT = 'Sort'
     LIMIT = 'Limit'
 
-    SCAN_NORMAL_TYPES = [SEQ_SCAN, BITMAP_HEAP_SCAN]
-    SCAN_INDEX_TYPES = [INDEX_SCAN, INDEX_ONLY_SCAN, BITMAP_INDEX_SCAN]
+    SCAN_NORMAL_TYPES = [SEQ_SCAN, INDEX_SCAN, INDEX_ONLY_SCAN, BITMAP_HEAP_SCAN]
+    SCAN_INDEX_TYPES = [BITMAP_INDEX_SCAN]
     SCAN_TYPES = SCAN_NORMAL_TYPES + SCAN_INDEX_TYPES
     AGGREGATE_TYPES = [AGGREGATE, HASH_AGGREGATE]
 
 class Strings:
     TITLE = 'QEP Visualizer'
     HIGHLIGHT_LABEL = "highlight.TLabel"
-
-
-if __name__=="__main__":
-    for o in Fields.as_list():
-        print(o)
+    BW_LABLE = "BW.TLabel"
+    PADDING = "3 3 12 12"
+    COL_EXE_TIME = 'exe_time'
+    EXE_TIME_TEXT = 'exe_time / ms'
+    COL_PERCENTAGE = 'percentage'
+    PERCENTAGE_TEXT = 'percentage'
+    ATTRIBUTE_TEXT = 'ATTRIBUTE'
+    VALUE_TEXT = "VALUE"
