@@ -1,4 +1,3 @@
-#%%
 from constants import Fields as F
 from constants import NaN
 
