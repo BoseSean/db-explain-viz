@@ -3,11 +3,9 @@ from constants import Fields as F
 
 from itertools import cycle
 import json
+import os
+import sys
 
-# plan1 = json.load(open("db/qep_1.json", "r"))[0]['Plan']
-# plan2 = json.load(open("db/qep_2.json", "r"))[0]['Plan']
-plan1 = json.load(open("../db/qep_1.json", "r"))[0]['Plan']
-plan2 = json.load(open("../db/qep_3.json", "r"))[0]['Plan']
 actual_values = set([F.ACTUAL_ROWS,F.ACTUAL_TOTAL_TIME,F.ACTUAL_LOOPS,F.ACTUAL_DURATION,F.ACTUAL_COST])
 
 class cprint:
@@ -32,21 +30,17 @@ class cprint:
         per_width = int((width-(self.num-1)*2) / self.num)
         for line in range(len(self.out_buffs[0])):
             line_all_buff = []
-            # if_first_line_in_item = True
             for s_l in self.out_buffs:
                 s_l = s_l[line]
                 indent_by = s_l[1]
                 color = s_l[2]
                 w =  per_width - indent_by*2
                 temp = [s_l[0][i:i+w] for i in range(0, len(s_l[0]), w)]
-                # leading_mark = ">" if if_first_line_in_item else " "
-                # if_first_line_in_item = false
                 temp = [" >"*indent_by+ color + i.ljust(w) +self.ENDC for i in temp]
                 line_all_buff.append(temp)
             
             for real_line in list(map(list, zip(*line_all_buff))):
                 print(" |".join(real_line))
-            # print(" |".join( [i[line].ljust(50, " ") for i in self.out_buffs] ))
 
 def get_human(dic, key):
     if key not in dic:
@@ -71,9 +65,22 @@ def diff(p1, p2, depth):
         for subp1, subp2 in zip(p1[F.PLANS],p2[F.PLANS]):
             diff(subp1,subp2, depth+1)
 
+
+if len(sys.argv) == 3:
+    plan1_path = sys.argv[1]
+    plan2_path = sys.argv[2]
+else:
+    plan1_path = '../db/qep_1.json'
+    plan2_path = '../db/qep_3.json'
+
+plan1 = json.load(open(plan1_path, "r"))[0]['Plan']
+plan2 = json.load(open(plan2_path, "r"))[0]['Plan']
+(rows, columns) = os.popen('stty size', 'r').read().split()
 printer = cprint(2)
 diff(plan1,plan2, 0)
-
-import os
-(rows, columns) = os.popen('stty size', 'r').read().split()
 printer.output(int(columns))
+
+if len(sys.argv) != 3:
+    print("Usage: python3 qep_diff.py <qep1> <qep2>")
+    print("Showing default sample...")
+print("Diffed "+ plan1_path+ " "+plan2_path)
