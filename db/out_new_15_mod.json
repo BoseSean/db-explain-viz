@@ -1,0 +1,217 @@
+[
+  {
+    "Plan": {
+      "Node Type": "Limit",
+      "Parallel Aware": false,
+      "Startup Cost": 161618.51,
+      "Total Cost": 161629.09,
+      "Plan Rows": 1,
+      "Plan Width": 188,
+      "Actual Startup Time": 570.697,
+      "Actual Total Time": 570.699,
+      "Actual Rows": 1,
+      "Actual Loops": 1,
+      "Plans": [
+        {
+          "Node Type": "Aggregate",
+          "Strategy": "Sorted",
+          "Partial Mode": "Finalize",
+          "Parent Relationship": "InitPlan",
+          "Subplan Name": "CTE revenue0",
+          "Parallel Aware": false,
+          "Startup Cost": 160841.73,
+          "Total Cost": 161166.76,
+          "Plan Rows": 10001,
+          "Plan Width": 40,
+          "Actual Startup Time": 548.607,
+          "Actual Total Time": 565.017,
+          "Actual Rows": 10000,
+          "Actual Loops": 1,
+          "Group Key": ["lineitem.l_suppkey"],
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Startup Cost": 160841.73,
+              "Total Cost": 160891.73,
+              "Plan Rows": 20002,
+              "Plan Width": 40,
+              "Actual Startup Time": 548.596,
+              "Actual Total Time": 550.697,
+              "Actual Rows": 30000,
+              "Actual Loops": 1,
+              "Sort Key": ["lineitem.l_suppkey"],
+              "Sort Method": "external merge",
+              "Sort Space Used": 1800,
+              "Sort Space Type": "Disk",
+              "Plans": [
+                {
+                  "Node Type": "Gather",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Startup Cost": 157287.59,
+                  "Total Cost": 159412.80,
+                  "Plan Rows": 20002,
+                  "Plan Width": 40,
+                  "Actual Startup Time": 521.855,
+                  "Actual Total Time": 531.870,
+                  "Actual Rows": 30000,
+                  "Actual Loops": 1,
+                  "Workers Planned": 2,
+                  "Workers Launched": 2,
+                  "Single Copy": false,
+                  "Plans": [
+                    {
+                      "Node Type": "Aggregate",
+                      "Strategy": "Hashed",
+                      "Partial Mode": "Partial",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Startup Cost": 156287.59,
+                      "Total Cost": 156412.60,
+                      "Plan Rows": 10001,
+                      "Plan Width": 40,
+                      "Actual Startup Time": 518.084,
+                      "Actual Total Time": 523.010,
+                      "Actual Rows": 10000,
+                      "Actual Loops": 3,
+                      "Group Key": ["lineitem.l_suppkey"],
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": true,
+                          "Relation Name": "lineitem",
+                          "Alias": "lineitem",
+                          "Startup Cost": 0.00,
+                          "Total Cost": 152799.58,
+                          "Plan Rows": 348801,
+                          "Plan Width": 20,
+                          "Actual Startup Time": 0.027,
+                          "Actual Total Time": 357.682,
+                          "Actual Rows": 285666,
+                          "Actual Loops": 3,
+                          "Filter": "(l_shipmode = 'TRUCK'::bpchar)",
+                          "Rows Removed by Filter": 1714739
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Node Type": "Aggregate",
+          "Strategy": "Plain",
+          "Partial Mode": "Simple",
+          "Parent Relationship": "InitPlan",
+          "Subplan Name": "InitPlan 2 (returns $2)",
+          "Parallel Aware": false,
+          "Startup Cost": 225.02,
+          "Total Cost": 225.03,
+          "Plan Rows": 1,
+          "Plan Width": 32,
+          "Actual Startup Time": 19.823,
+          "Actual Total Time": 19.823,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Plans": [
+            {
+              "Node Type": "CTE Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "CTE Name": "revenue0",
+              "Alias": "revenue0_1",
+              "Startup Cost": 0.00,
+              "Total Cost": 200.02,
+              "Plan Rows": 10001,
+              "Plan Width": 32,
+              "Actual Startup Time": 0.000,
+              "Actual Total Time": 18.537,
+              "Actual Rows": 10000,
+              "Actual Loops": 1
+            }
+          ]
+        },
+        {
+          "Node Type": "Merge Join",
+          "Parent Relationship": "Outer",
+          "Parallel Aware": false,
+          "Join Type": "Inner",
+          "Startup Cost": 226.72,
+          "Total Cost": 755.47,
+          "Plan Rows": 50,
+          "Plan Width": 188,
+          "Actual Startup Time": 570.696,
+          "Actual Total Time": 570.696,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Inner Unique": false,
+          "Merge Cond": "(supplier.s_suppkey = revenue0.supplier_no)",
+          "Plans": [
+            {
+              "Node Type": "Index Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Scan Direction": "Forward",
+              "Index Name": "supplier_pkey",
+              "Relation Name": "supplier",
+              "Alias": "supplier",
+              "Startup Cost": 0.29,
+              "Total Cost": 503.29,
+              "Plan Rows": 10000,
+              "Plan Width": 148,
+              "Actual Startup Time": 0.027,
+              "Actual Total Time": 0.664,
+              "Actual Rows": 4000,
+              "Actual Loops": 1
+            },
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Inner",
+              "Parallel Aware": false,
+              "Startup Cost": 226.43,
+              "Total Cost": 226.56,
+              "Plan Rows": 50,
+              "Plan Width": 40,
+              "Actual Startup Time": 569.830,
+              "Actual Total Time": 569.830,
+              "Actual Rows": 1,
+              "Actual Loops": 1,
+              "Sort Key": ["revenue0.supplier_no"],
+              "Sort Method": "quicksort",
+              "Sort Space Used": 25,
+              "Sort Space Type": "Memory",
+              "Plans": [
+                {
+                  "Node Type": "CTE Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "CTE Name": "revenue0",
+                  "Alias": "revenue0",
+                  "Startup Cost": 0.00,
+                  "Total Cost": 225.02,
+                  "Plan Rows": 50,
+                  "Plan Width": 40,
+                  "Actual Startup Time": 568.989,
+                  "Actual Total Time": 569.822,
+                  "Actual Rows": 1,
+                  "Actual Loops": 1,
+                  "Filter": "(total_revenue = $2)",
+                  "Rows Removed by Filter": 9999
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Planning Time": 0.559,
+    "Triggers": [
+    ],
+    "Execution Time": 572.089
+  }
+]

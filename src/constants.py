@@ -11,6 +11,7 @@ class Fields:
     PLAN_ROWS = 'Plan Rows'
     ACTUAL_TOTAL_TIME = 'Actual Total Time'
     ACTUAL_LOOPS = 'Actual Loops'
+    ACTUAL_STARTUP_TIME = 'Actual Startup Time'
     TOTAL_COST = 'Total Cost'
     PLANS = 'Plans'
     PLAN = 'Plan'

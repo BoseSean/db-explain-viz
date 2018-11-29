@@ -1,0 +1,174 @@
+[41mTotal Cost: 161629.09                [0m |[41mTotal Cost: 165342.71                [0m
+[0mParallel Aware: False                [0m |[0mParallel Aware: False                [0m
+[0mActual Total Time: 570.699           [0m |[0mActual Total Time: 388.294           [0m
+[0mActual Loops: 1                      [0m |[0mActual Loops: 1                      [0m
+[0mActual Startup Time: 570.697         [0m |[0mActual Startup Time: 388.292         [0m
+[0mActual Rows: 1                       [0m |[0mActual Rows: 1                       [0m
+[0mPlan Rows: 1                         [0m |[0mPlan Rows: 1                         [0m
+[0mNode Type: Limit                     [0m |[0mNode Type: Limit                     [0m
+[41mStartup Cost: 161618.51              [0m |[41mStartup Cost: 165332.14              [0m
+[41mPlan Width: 188                      [0m |[41mPlan Width: 103                      [0m
+ >[0mStrategy: Sorted                   [0m | >[0mStrategy: Sorted                   [0m
+ >[42mTotal Cost: 161166.76              [0m | >[42mTotal Cost: 164880.39              [0m
+ >[0mParallel Aware: False              [0m | >[0mParallel Aware: False              [0m
+ >[0mActual Total Time: 565.017         [0m | >[0mActual Total Time: 382.52          [0m
+ >[0mGroup Key: lineitem.l_suppkey      [0m | >[0mGroup Key: lineitem.l_suppkey      [0m
+ >[0mActual Loops: 1                    [0m | >[0mActual Loops: 1                    [0m
+ >[0mParent Relationship: InitPlan      [0m | >[0mParent Relationship: InitPlan      [0m
+ >[0mSubplan Name: CTE revenue0         [0m | >[0mSubplan Name: CTE revenue0         [0m
+ >[0mActual Startup Time: 548.607       [0m | >[0mActual Startup Time: 366.11        [0m
+ >[0mActual Rows: 10000                 [0m | >[0mActual Rows: 10000                 [0m
+ >[0mNode Type: Aggregate               [0m | >[0mNode Type: Aggregate               [0m
+ >[0mPlan Rows: 10001                   [0m | >[0mPlan Rows: 10001                   [0m
+ >[42mStartup Cost: 160841.73            [0m | >[42mStartup Cost: 164555.35            [0m
+ >[0mPartial Mode: Finalize             [0m | >[0mPartial Mode: Finalize             [0m
+ >[0mPlan Width: 40                     [0m | >[0mPlan Width: 40                     [0m
+ > >[0mSort Method: external merge      [0m | > >[0mSort Method: external merge      [0m
+ > >[43mTotal Cost: 160891.73            [0m | > >[43mTotal Cost: 164605.36            [0m
+ > >[0mSort Space Used: 1800            [0m | > >[0mSort Space Used: 1800            [0m
+ > >[0mParallel Aware: False            [0m | > >[0mParallel Aware: False            [0m
+ > >[0mActual Total Time: 550.697       [0m | > >[0mActual Total Time: 368.175       [0m
+ > >[0mSort Space Type: Disk            [0m | > >[0mSort Space Type: Disk            [0m
+ > >[0mActual Loops: 1                  [0m | > >[0mActual Loops: 1                  [0m
+ > >[0mParent Relationship: Outer       [0m | > >[0mParent Relationship: Outer       [0m
+ > >[0mActual Startup Time: 548.596     [0m | > >[0mActual Startup Time: 366.098     [0m
+ > >[0mActual Rows: 30000               [0m | > >[0mActual Rows: 29985               [0m
+ > >[0mNode Type: Sort                  [0m | > >[0mNode Type: Sort                  [0m
+ > >[0mPlan Rows: 20002                 [0m | > >[0mPlan Rows: 20002                 [0m
+ > >[43mStartup Cost: 160841.73          [0m | > >[43mStartup Cost: 164555.35          [0m
+ > >[0mSort Key: lineitem.l_suppkey     [0m | > >[0mSort Key: lineitem.l_suppkey     [0m
+ > >[0mPlan Width: 40                   [0m | > >[0mPlan Width: 40                   [0m
+ > > >[41mTotal Cost: 159412.8           [0m | > > >[41mTotal Cost: 163126.43          [0m
+ > > >[0mWorkers Planned: 2             [0m | > > >[0mWorkers Planned: 2             [0m
+ > > >[0mParallel Aware: False          [0m | > > >[0mParallel Aware: False          [0m
+ > > >[0mActual Total Time: 531.87      [0m | > > >[0mActual Total Time: 349.435     [0m
+ > > >[0mActual Loops: 1                [0m | > > >[0mActual Loops: 1                [0m
+ > > >[0mParent Relationship: Outer     [0m | > > >[0mParent Relationship: Outer     [0m
+ > > >[0mWorkers Launched: 2            [0m | > > >[0mWorkers Launched: 2            [0m
+ > > >[0mActual Startup Time: 521.855   [0m | > > >[0mActual Startup Time: 339.375   [0m
+ > > >[0mActual Rows: 30000             [0m | > > >[0mActual Rows: 29985             [0m
+ > > >[0mSingle Copy: False             [0m | > > >[0mSingle Copy: False             [0m
+ > > >[0mNode Type: Gather              [0m | > > >[0mNode Type: Gather              [0m
+ > > >[0mPlan Rows: 20002               [0m | > > >[0mPlan Rows: 20002               [0m
+ > > >[41mStartup Cost: 157287.59        [0m | > > >[41mStartup Cost: 161001.21        [0m
+ > > >[0mPlan Width: 40                 [0m | > > >[0mPlan Width: 40                 [0m
+ > > > >[0mStrategy: Hashed             [0m | > > > >[0mStrategy: Hashed             [0m
+ > > > >[42mTotal Cost: 156412.6         [0m | > > > >[42mTotal Cost: 160126.23        [0m
+ > > > >[0mParallel Aware: False        [0m | > > > >[0mParallel Aware: False        [0m
+ > > > >[0mActual Total Time: 523.01    [0m | > > > >[0mActual Total Time: 339.291   [0m
+ > > > >[0mGroup Key: lineitem.l_suppkey[0m | > > > >[0mGroup Key: lineitem.l_suppkey[0m
+ > > > >[0mActual Loops: 3              [0m | > > > >[0mActual Loops: 3              [0m
+ > > > >[0mParent Relationship: Outer   [0m | > > > >[0mParent Relationship: Outer   [0m
+ > > > >[0mActual Startup Time: 518.084 [0m | > > > >[0mActual Startup Time: 334.364 [0m
+ > > > >[0mActual Rows: 10000           [0m | > > > >[0mActual Rows: 9995            [0m
+ > > > >[0mNode Type: Aggregate         [0m | > > > >[0mNode Type: Aggregate         [0m
+ > > > >[0mPlan Rows: 10001             [0m | > > > >[0mPlan Rows: 10001             [0m
+ > > > >[42mStartup Cost: 156287.59      [0m | > > > >[42mStartup Cost: 160001.21      [0m
+ > > > >[0mPartial Mode: Partial        [0m | > > > >[0mPartial Mode: Partial        [0m
+ > > > >[0mPlan Width: 40               [0m | > > > >[0mPlan Width: 40               [0m
+ > > > > >[43mTotal Cost: 152799.58      [0m | > > > > >[43mTotal Cost: 159050.49      [0m
+ > > > > >[0mParallel Aware: True       [0m | > > > > >[0mParallel Aware: True       [0m
+ > > > > >[0mActual Total Time: 357.682 [0m | > > > > >[0mActual Total Time: 287.967 [0m
+ > > > > >[0mActual Loops: 3            [0m | > > > > >[0mActual Loops: 3            [0m
+ > > > > >[0mParent Relationship: Outer [0m | > > > > >[0mParent Relationship: Outer [0m
+ > > > > >[0mActual Startup Time: 0.027 [0m | > > > > >[0mActual Startup Time: 0.04  [0m
+ > > > > >[0mActual Rows: 285666        [0m | > > > > >[0mActual Rows: 76657         [0m
+ > > > > >[43mFilter: (l_shipmode = 'TRUC[0m | > > > > >[43mFilter: ((l_shipdate >= '19[0m
+ > > > > >[43mK'::bpchar)                [0m | > > > > >[43m97-05-01'::date) AND (l_shi[0m
+ > > > > >[0mNode Type: Seq Scan        [0m | > > > > >[0mNode Type: Seq Scan        [0m
+ > > > > >[43mPlan Rows: 348801          [0m | > > > > >[43mPlan Rows: 95072           [0m
+ > > > > >[0mStartup Cost: 0.0          [0m | > > > > >[0mStartup Cost: 0.0          [0m
+ > > > > >[0mRelation Name: lineitem    [0m | > > > > >[0mRelation Name: lineitem    [0m
+ > > > > >[43mRows Removed by Filter: 171[0m | > > > > >[43mRows Removed by Filter: 192[0m
+ > > > > >[43m4739                       [0m | > > > > >[43m3748                       [0m
+ > > > > >[0mAlias: lineitem            [0m | > > > > >[0mAlias: lineitem            [0m
+ > > > > >[0mPlan Width: 20             [0m | > > > > >[0mPlan Width: 20             [0m
+ >[0mStrategy: Plain                    [0m | >[0mStrategy: Plain                    [0m
+ >[0mTotal Cost: 225.03                 [0m | >[0mTotal Cost: 225.03                 [0m
+ >[0mParallel Aware: False              [0m | >[0mParallel Aware: False              [0m
+ >[0mActual Total Time: 19.823          [0m | >[0mActual Total Time: 19.864          [0m
+ >[0mActual Loops: 1                    [0m | >[0mActual Loops: 1                    [0m
+ >[0mParent Relationship: InitPlan      [0m | >[0mParent Relationship: InitPlan      [0m
+ >[0mSubplan Name: InitPlan 2 (returns $[0m | >[0mSubplan Name: InitPlan 2 (returns $[0m
+ >[0m2)                                 [0m | >[0m2)                                 [0m
+ >[0mActual Startup Time: 19.823        [0m | >[0mActual Startup Time: 19.864        [0m
+ >[0mActual Rows: 1                     [0m | >[0mActual Rows: 1                     [0m
+ >[0mNode Type: Aggregate               [0m | >[0mNode Type: Aggregate               [0m
+ >[0mPlan Rows: 1                       [0m | >[0mPlan Rows: 1                       [0m
+ >[0mStartup Cost: 225.02               [0m | >[0mStartup Cost: 225.02               [0m
+ >[0mPartial Mode: Simple               [0m | >[0mPartial Mode: Simple               [0m
+ >[0mPlan Width: 32                     [0m | >[0mPlan Width: 32                     [0m
+ > >[0mTotal Cost: 200.02               [0m | > >[0mTotal Cost: 200.02               [0m
+ > >[0mParallel Aware: False            [0m | > >[0mParallel Aware: False            [0m
+ > >[0mActual Total Time: 18.537        [0m | > >[0mActual Total Time: 18.583        [0m
+ > >[0mActual Loops: 1                  [0m | > >[0mActual Loops: 1                  [0m
+ > >[0mParent Relationship: Outer       [0m | > >[0mParent Relationship: Outer       [0m
+ > >[0mActual Startup Time: 0.0         [0m | > >[0mActual Startup Time: 0.001       [0m
+ > >[0mActual Rows: 10000               [0m | > >[0mActual Rows: 10000               [0m
+ > >[0mNode Type: CTE Scan              [0m | > >[0mNode Type: CTE Scan              [0m
+ > >[0mCTE Name: revenue0               [0m | > >[0mCTE Name: revenue0               [0m
+ > >[0mStartup Cost: 0.0                [0m | > >[0mStartup Cost: 0.0                [0m
+ > >[0mPlan Rows: 10001                 [0m | > >[0mPlan Rows: 10001                 [0m
+ > >[0mAlias: revenue0_1                [0m | > >[0mAlias: revenue0_1                [0m
+ > >[0mPlan Width: 32                   [0m | > >[0mPlan Width: 32                   [0m
+ >[0mTotal Cost: 755.47                 [0m | >[0mTotal Cost: 755.47                 [0m
+ >[0mParallel Aware: False              [0m | >[0mParallel Aware: False              [0m
+ >[0mActual Total Time: 570.696         [0m | >[0mActual Total Time: 388.291         [0m
+ >[0mActual Loops: 1                    [0m | >[0mActual Loops: 1                    [0m
+ >[0mMerge Cond: (supplier.s_suppkey = r[0m | >[0mMerge Cond: (supplier.s_suppkey = r[0m
+ >[0mevenue0.supplier_no)               [0m | >[0mevenue0.supplier_no)               [0m
+ >[0mParent Relationship: Outer         [0m | >[0mParent Relationship: Outer         [0m
+ >[0mActual Startup Time: 570.696       [0m | >[0mActual Startup Time: 388.291       [0m
+ >[0mActual Rows: 1                     [0m | >[0mActual Rows: 1                     [0m
+ >[0mInner Unique: False                [0m | >[0mInner Unique: False                [0m
+ >[0mNode Type: Merge Join              [0m | >[0mNode Type: Merge Join              [0m
+ >[0mPlan Rows: 50                      [0m | >[0mPlan Rows: 50                      [0m
+ >[0mStartup Cost: 226.72               [0m | >[0mStartup Cost: 226.72               [0m
+ >[0mJoin Type: Inner                   [0m | >[0mJoin Type: Inner                   [0m
+ >[43mPlan Width: 188                    [0m | >[43mPlan Width: 103                    [0m
+ > >[0mTotal Cost: 503.29               [0m | > >[0mTotal Cost: 503.29               [0m
+ > >[0mParallel Aware: False            [0m | > >[0mParallel Aware: False            [0m
+ > >[0mScan Direction: Forward          [0m | > >[0mScan Direction: Forward          [0m
+ > >[0mActual Total Time: 0.664         [0m | > >[0mActual Total Time: 0.82          [0m
+ > >[0mActual Loops: 1                  [0m | > >[0mActual Loops: 1                  [0m
+ > >[0mParent Relationship: Outer       [0m | > >[0mParent Relationship: Outer       [0m
+ > >[0mActual Startup Time: 0.027       [0m | > >[0mActual Startup Time: 0.63        [0m
+ > >[0mActual Rows: 4000                [0m | > >[0mActual Rows: 976                 [0m
+ > >[0mIndex Name: supplier_pkey        [0m | > >[0mIndex Name: supplier_pkey        [0m
+ > >[0mNode Type: Index Scan            [0m | > >[0mNode Type: Index Scan            [0m
+ > >[0mPlan Rows: 10000                 [0m | > >[0mPlan Rows: 10000                 [0m
+ > >[0mStartup Cost: 0.29               [0m | > >[0mStartup Cost: 0.29               [0m
+ > >[0mRelation Name: supplier          [0m | > >[0mRelation Name: supplier          [0m
+ > >[0mAlias: supplier                  [0m | > >[0mAlias: supplier                  [0m
+ > >[41mPlan Width: 148                  [0m | > >[41mPlan Width: 71                   [0m
+ > >[0mSort Method: quicksort           [0m | > >[0mSort Method: quicksort           [0m
+ > >[0mTotal Cost: 226.56               [0m | > >[0mTotal Cost: 226.56               [0m
+ > >[0mSort Space Used: 25              [0m | > >[0mSort Space Used: 25              [0m
+ > >[0mParallel Aware: False            [0m | > >[0mParallel Aware: False            [0m
+ > >[0mActual Total Time: 569.83        [0m | > >[0mActual Total Time: 387.416       [0m
+ > >[0mSort Space Type: Memory          [0m | > >[0mSort Space Type: Memory          [0m
+ > >[0mActual Loops: 1                  [0m | > >[0mActual Loops: 1                  [0m
+ > >[0mParent Relationship: Inner       [0m | > >[0mParent Relationship: Inner       [0m
+ > >[0mActual Startup Time: 569.83      [0m | > >[0mActual Startup Time: 387.416     [0m
+ > >[0mActual Rows: 1                   [0m | > >[0mActual Rows: 1                   [0m
+ > >[0mNode Type: Sort                  [0m | > >[0mNode Type: Sort                  [0m
+ > >[0mPlan Rows: 50                    [0m | > >[0mPlan Rows: 50                    [0m
+ > >[0mStartup Cost: 226.43             [0m | > >[0mStartup Cost: 226.43             [0m
+ > >[0mSort Key: revenue0.supplier_no   [0m | > >[0mSort Key: revenue0.supplier_no   [0m
+ > >[0mPlan Width: 40                   [0m | > >[0mPlan Width: 40                   [0m
+ > > >[0mTotal Cost: 225.02             [0m | > > >[0mTotal Cost: 225.02             [0m
+ > > >[0mParallel Aware: False          [0m | > > >[0mParallel Aware: False          [0m
+ > > >[0mActual Total Time: 569.822     [0m | > > >[0mActual Total Time: 387.401     [0m
+ > > >[0mActual Loops: 1                [0m | > > >[0mActual Loops: 1                [0m
+ > > >[0mParent Relationship: Outer     [0m | > > >[0mParent Relationship: Outer     [0m
+ > > >[0mActual Startup Time: 568.989   [0m | > > >[0mActual Startup Time: 386.12    [0m
+ > > >[0mActual Rows: 1                 [0m | > > >[0mActual Rows: 1                 [0m
+ > > >[0mFilter: (total_revenue = $2)   [0m | > > >[0mFilter: (total_revenue = $2)   [0m
+ > > >[0mNode Type: CTE Scan            [0m | > > >[0mNode Type: CTE Scan            [0m
+ > > >[0mCTE Name: revenue0             [0m | > > >[0mCTE Name: revenue0             [0m
+ > > >[0mStartup Cost: 0.0              [0m | > > >[0mStartup Cost: 0.0              [0m
+ > > >[0mPlan Rows: 50                  [0m | > > >[0mPlan Rows: 50                  [0m
+ > > >[0mRows Removed by Filter: 9999   [0m | > > >[0mRows Removed by Filter: 9999   [0m
+ > > >[0mAlias: revenue0                [0m | > > >[0mAlias: revenue0                [0m
+ > > >[0mPlan Width: 40                 [0m | > > >[0mPlan Width: 40                 [0m
+Diffed ../db/out_new_15_mod.json ../db/out_new_15.json
